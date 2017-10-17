@@ -30,6 +30,7 @@ class PuppeteerPerformanceLogger {
       const data = await this.loadPerformanceStats()
       return data[this[_pageHash]]
     } catch (err) {
+      console.error(err)
     }
 
     return null
@@ -40,6 +41,7 @@ class PuppeteerPerformanceLogger {
     try {
       json = await this.loadPerformanceStats()
     } catch (err) {
+      console.log(`Creating file ${logFileName}`)
     }
     json[this[_pageHash]] = stats
 
