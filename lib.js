@@ -66,7 +66,7 @@ class PuppeteerPageTest {
   }
 
   async getPreviousPerformanceStats () {
-    return await this[_logger].getPreviousPerformanceStats()
+    return await this[_logger].getPerformanceStats()
   }
 
 }

@@ -25,7 +25,7 @@ class PuppeteerPerformanceLogger {
     })
   }
 
-  async getPreviousPerformanceStats () {
+  async getPerformanceStats () {
     try {
       const data = await this.loadPerformanceStats()
       return data[this[_pageHash]]
@@ -36,14 +36,14 @@ class PuppeteerPerformanceLogger {
   }
 
   async savePerformanceStats (stats) {
-    return new Promise(async (resolve, reject) => {
-      let json = {}
-      try {
-        json = await this.loadPerformanceStats()
-      } catch (err) {
-      }
-      json[this[_pageHash]] = stats
+    let json = {}
+    try {
+      json = await this.loadPerformanceStats()
+    } catch (err) {
+    }
+    json[this[_pageHash]] = stats
 
+    return new Promise(async (resolve, reject) => {
       fs.writeFile(logFileName, JSON.stringify(json), err => {
         if (err) {
           reject(err)
