@@ -44,6 +44,6 @@
     await p.stop()
   } catch (err) {
     console.error(err)
-    process.exit(0)
+    process.exit(1)
   }
 })()
