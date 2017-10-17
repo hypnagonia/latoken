@@ -3,6 +3,8 @@ const PuppeteerPerformanceLogger = require('./logger')
 const _isStarted = Symbol('isStarted')
 const _logger = Symbol('logger')
 const _url = Symbol('url')
+const _page = Symbol('page')
+const _browser = Symbol('browser')
 
 class PuppeteerPageTest {
   constructor (url) {
@@ -21,8 +23,8 @@ class PuppeteerPageTest {
       throw new Error('the instance is already running')
     }
 
-    this.browser = await puppeteer.launch()
-    this.page = await this.browser.newPage()
+    this[_browser] = await puppeteer.launch()
+    this[_page] = await this[_browser].newPage()
     this[_isStarted] = true
   }
 
@@ -31,18 +33,18 @@ class PuppeteerPageTest {
       throw new Error('the instance is not running')
     }
 
-    await this.browser.close()
+    await this[_browser].close()
     this[_isStarted] = false
   }
 
   async isPageHttpStatusOk () {
-    const res = await this.page.goto(this[_url])
+    const res = await this[_page].goto(this[_url])
     return res.ok
   }
 
   async hasTextInTime (text, timeout) {
-    await this.page.goto(this[_url])
-    await this.page.waitFor(
+    await  this[_page].goto(this[_url])
+    await  this[_page].waitFor(
       text => ~document.body.innerText.indexOf(text),
       {timeout},
       text
@@ -52,8 +54,8 @@ class PuppeteerPageTest {
   }
 
   async getPerfomanceStats () {
-    await this.page.goto(this[_url])
-    const performance = await this.page.evaluate(() => performance.timing)
+    await this[_page].goto(this[_url])
+    const performance = await this[_page].evaluate(() => performance.timing)
 
     const stats = {
       totalTimeMs: performance.loadEventEnd - performance.navigationStart,
